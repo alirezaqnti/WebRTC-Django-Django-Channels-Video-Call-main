@@ -9,7 +9,7 @@ let otherUser;
 let remoteRTCMessage;
 
 let iceCandidatesFromCaller = [];
-let peerConnection;
+var peerConnection;
 let remoteStream;
 let localStream;
 
