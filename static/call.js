@@ -21,7 +21,7 @@ function call() {
 
   beReady().then((bool) => {
     console.log(bool);
-    processCall(userToCall);
+    processCall(userToCall, bool);
   });
 }
 
@@ -30,7 +30,7 @@ function answer() {
   //do the event firing
 
   beReady().then((bool) => {
-    processAccept();
+    processAccept(bool);
   });
 
   document.getElementById("answer").style.display = "none";
@@ -268,7 +268,7 @@ function createConnectionAndAddStream() {
   return true;
 }
 
-function processCall(userName) {
+function processCall(userName, peerConnection) {
   peerConnection.createOffer(
     (sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
@@ -283,7 +283,7 @@ function processCall(userName) {
   );
 }
 
-function processAccept() {
+function processAccept(peerConnection) {
   console.log(peerConnection);
   peerConnection.setRemoteDescription(
     new RTCSessionDescription(remoteRTCMessage)
