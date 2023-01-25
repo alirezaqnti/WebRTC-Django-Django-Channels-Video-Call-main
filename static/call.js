@@ -43,7 +43,7 @@ let pcConfig = {
       username: "openrelayproject",
       credential: "openrelayproject",
     },
-    { url: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun.l.google.com:19302" },
   ],
 };
 
@@ -299,7 +299,7 @@ function processAccept() {
 function createPeerConnection() {
   try {
     alert("RTCPeerConnection");
-    peerConnection = new RTCPeerConnection(pcConfig);
+    peerConnection = new pcConfig();
     peerConnection.onicecandidate = handleIceCandidate;
     alert("handleIceCandidate");
     peerConnection.onaddstream = handleRemoteStreamAdded;
