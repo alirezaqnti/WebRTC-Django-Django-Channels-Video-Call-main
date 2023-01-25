@@ -236,7 +236,10 @@ function beReady() {
         // return;
       }
       alert(peerConnection);
-      peerConnection.addStream(localStream);
+      localStream
+        .getTracks()
+        .forEach((track) => peerConnection.addTrack(track, localStream));
+      //   peerConnection.addStream(localStream);
       return peerConnection;
     })
     .catch(function (e) {
