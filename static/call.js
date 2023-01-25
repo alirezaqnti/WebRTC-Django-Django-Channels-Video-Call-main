@@ -38,11 +38,10 @@ function answer() {
 
 let pcConfig = {
   iceServers: [
-    // { url: "stun:stun.jap.bloggernepal.com:5349" },
     {
       urls: "turn:openrelay.metered.ca:80",
       username: "openrelayproject",
-      credentials: "openrelayproject",
+      credential: "openrelayproject",
     },
     { url: "stun:stun.l.google.com:19302" },
   ],
@@ -213,7 +212,7 @@ function sendICEcandidate(data) {
 function beReady() {
   return navigator.mediaDevices
     .getUserMedia({
-      //   audio: true,
+      audio: true,
       video: true,
     })
     .then((stream) => {
