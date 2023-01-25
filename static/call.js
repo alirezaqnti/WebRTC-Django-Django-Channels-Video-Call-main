@@ -217,8 +217,26 @@ function beReady() {
     .then((stream) => {
       localStream = stream;
       localVideo.srcObject = stream;
+      try {
+        alert("RTCPeerConnection");
+        var peerConnection = new RTCPeerConnection(pcConfig);
+        peerConnection.onicecandidate = handleIceCandidate;
+        alert("handleIceCandidate");
+        peerConnection.onaddstream = handleRemoteStreamAdded;
+        alert("handleRemoteStreamAdded");
+        peerConnection.onremovestream = handleRemoteStreamRemoved;
+        alert("handleRemoteStreamRemoved");
 
-      return createConnectionAndAddStream();
+        console.log("Created RTCPeerConnnection");
+        // return;
+      } catch (e) {
+        console.log("Failed to create PeerConnection, exception: " + e.message);
+        alert("Cannot create RTCPeerConnection object.");
+        // return;
+      }
+      alert(peerConnection);
+      peerConnection.addStream(localStream);
+      return peerConnection;
     })
     .catch(function (e) {
       alert("getUserMedia() error: " + e.message);
@@ -226,7 +244,24 @@ function beReady() {
 }
 
 function createConnectionAndAddStream() {
-  createPeerConnection();
+  //   createPeerConnection();
+  try {
+    alert("RTCPeerConnection");
+    var peerConnection = new RTCPeerConnection(pcConfig);
+    peerConnection.onicecandidate = handleIceCandidate;
+    alert("handleIceCandidate");
+    peerConnection.onaddstream = handleRemoteStreamAdded;
+    alert("handleRemoteStreamAdded");
+    peerConnection.onremovestream = handleRemoteStreamRemoved;
+    alert("handleRemoteStreamRemoved");
+
+    console.log("Created RTCPeerConnnection");
+    // return;
+  } catch (e) {
+    console.log("Failed to create PeerConnection, exception: " + e.message);
+    alert("Cannot create RTCPeerConnection object.");
+    // return;
+  }
   alert(peerConnection);
   peerConnection.addStream(localStream);
   return true;
@@ -297,25 +332,25 @@ function processAccept() {
 
 /////////////////////////////////////////////////////////
 
-function createPeerConnection() {
-  try {
-    alert("RTCPeerConnection");
-    var peerConnection = new RTCPeerConnection(pcConfig);
-    peerConnection.onicecandidate = handleIceCandidate;
-    alert("handleIceCandidate");
-    peerConnection.onaddstream = handleRemoteStreamAdded;
-    alert("handleRemoteStreamAdded");
-    peerConnection.onremovestream = handleRemoteStreamRemoved;
-    alert("handleRemoteStreamRemoved");
+// function createPeerConnection() {
+//   try {
+//     alert("RTCPeerConnection");
+//     var peerConnection = new RTCPeerConnection(pcConfig);
+//     peerConnection.onicecandidate = handleIceCandidate;
+//     alert("handleIceCandidate");
+//     peerConnection.onaddstream = handleRemoteStreamAdded;
+//     alert("handleRemoteStreamAdded");
+//     peerConnection.onremovestream = handleRemoteStreamRemoved;
+//     alert("handleRemoteStreamRemoved");
 
-    console.log("Created RTCPeerConnnection");
-    return;
-  } catch (e) {
-    console.log("Failed to create PeerConnection, exception: " + e.message);
-    alert("Cannot create RTCPeerConnection object.");
-    return;
-  }
-}
+//     console.log("Created RTCPeerConnnection");
+//     return;
+//   } catch (e) {
+//     console.log("Failed to create PeerConnection, exception: " + e.message);
+//     alert("Cannot create RTCPeerConnection object.");
+//     return;
+//   }
+// }
 
 function handleIceCandidate(event) {
   // console.log('icecandidate event: ', event);
