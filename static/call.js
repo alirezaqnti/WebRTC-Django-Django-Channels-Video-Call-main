@@ -9,7 +9,6 @@ let otherUser;
 let remoteRTCMessage;
 
 let iceCandidatesFromCaller = [];
-var peerConnection;
 let remoteStream;
 let localStream;
 
@@ -228,6 +227,7 @@ function beReady() {
 
 function createConnectionAndAddStream() {
   createPeerConnection();
+  alert(peerConnection);
   peerConnection.addStream(localStream);
   return true;
 }
@@ -248,6 +248,7 @@ function processCall(userName) {
 }
 
 function processAccept() {
+  console.log(peerConnection);
   peerConnection.setRemoteDescription(
     new RTCSessionDescription(remoteRTCMessage)
   );
@@ -299,7 +300,7 @@ function processAccept() {
 function createPeerConnection() {
   try {
     alert("RTCPeerConnection");
-    peerConnection = new RTCPeerConnection(pcConfig);
+    var peerConnection = new RTCPeerConnection(pcConfig);
     peerConnection.onicecandidate = handleIceCandidate;
     alert("handleIceCandidate");
     peerConnection.onaddstream = handleRemoteStreamAdded;
