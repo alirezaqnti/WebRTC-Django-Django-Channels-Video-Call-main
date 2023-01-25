@@ -20,6 +20,7 @@ function call() {
   otherUser = userToCall;
 
   beReady().then((bool) => {
+    console.log(bool);
     processCall(userToCall);
   });
 }
