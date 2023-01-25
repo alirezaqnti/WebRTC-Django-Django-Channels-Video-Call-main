@@ -299,7 +299,7 @@ function processAccept() {
 function createPeerConnection() {
   try {
     alert("RTCPeerConnection");
-    peerConnection = new pcConfig();
+    peerConnection = new RTCPeerConnection(pcConfig);
     peerConnection.onicecandidate = handleIceCandidate;
     alert("handleIceCandidate");
     peerConnection.onaddstream = handleRemoteStreamAdded;
