@@ -222,7 +222,7 @@ function beReady() {
       return createConnectionAndAddStream();
     })
     .catch(function (e) {
-      alert("getUserMedia() error: " + e.name);
+      alert("getUserMedia() error: " + e.message);
     });
 }
 
