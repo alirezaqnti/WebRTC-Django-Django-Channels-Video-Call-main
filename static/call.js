@@ -301,8 +301,12 @@ function createPeerConnection() {
     peerConnection = new RTCPeerConnection(pcConfig);
     // peerConnection = new RTCPeerConnection();
     peerConnection.onicecandidate = handleIceCandidate;
+    alert("handleIceCandidate");
     peerConnection.onaddstream = handleRemoteStreamAdded;
+    alert("handleRemoteStreamAdded");
     peerConnection.onremovestream = handleRemoteStreamRemoved;
+    alert("handleRemoteStreamRemoved");
+
     console.log("Created RTCPeerConnnection");
     return;
   } catch (e) {
