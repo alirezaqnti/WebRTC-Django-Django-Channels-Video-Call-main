@@ -217,6 +217,7 @@ function beReady() {
     })
     .then((stream) => {
       localStream = stream;
+      console.log(localStream);
       localVideo.srcObject = stream;
       try {
         alert("RTCPeerConnection");
@@ -378,6 +379,7 @@ function handleIceCandidate(event) {
 function handleRemoteStreamAdded(event) {
   console.log("Remote stream added.");
   remoteStream = event.stream;
+  console.log(remoteStream);
   remoteVideo.srcObject = remoteStream;
 }
 
