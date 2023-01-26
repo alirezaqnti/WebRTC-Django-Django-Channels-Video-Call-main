@@ -182,6 +182,7 @@ function sendCall(data) {
 function answerCall(data) {
   //to answer a call
   // socket.emit("answerCall", data);
+  console.log("answerCall");
   callSocket.send(
     JSON.stringify({
       type: "answer_call",
@@ -289,36 +290,43 @@ function processCall(userName, peerConnection) {
 
 function processAccept(peerConnection) {
   console.log(peerConnection);
+  console.log("processAccept");
   peerConnection.setRemoteDescription(
     new RTCSessionDescription(remoteRTCMessage)
   );
+  console.log("processAccept1");
   peerConnection.createAnswer(
     (sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
-
+      console.log("processAccept2");
       if (iceCandidatesFromCaller.length > 0) {
         //I am having issues with call not being processed in real world (internet, not local)
         //so I will push iceCandidates I received after the call arrived, push it and, once we accept
         //add it as ice candidate
         //if the offer rtc message contains all thes ICE candidates we can ingore this.
+        console.log("processAccept3");
         for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
           //
           let candidate = iceCandidatesFromCaller[i];
           console.log("ICE candidate Added From queue");
+          console.log("processAccept4");
           try {
             peerConnection
               .addIceCandidate(candidate)
               .then((done) => {
                 console.log(done);
+                console.log("processAccept5");
               })
               .catch((error) => {
                 console.log(error);
+                console.log("processAccept6");
               });
           } catch (error) {
             console.log(error);
           }
         }
         iceCandidatesFromCaller = [];
+        console.log("processAccept7");
         console.log("ICE candidate queue cleared");
       } else {
         console.log("NO Ice candidate in queue");
