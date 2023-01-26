@@ -78,7 +78,7 @@ function connectSocket() {
   callSocket.onmessage = (e) => {
     let response = JSON.parse(e.data);
 
-    // console.log(response);
+    console.log(response);
 
     let type = response.type;
 
