@@ -409,6 +409,7 @@ function stop() {
 }
 
 function callProgress() {
+  console.log("callProgress Called");
   document.getElementById("videos").style.display = "block";
   document.getElementById("otherUserNameC").innerHTML = otherUser;
   document.getElementById("inCall").style.display = "block";
