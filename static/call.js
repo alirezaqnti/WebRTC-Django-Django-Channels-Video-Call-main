@@ -30,16 +30,7 @@ function answer() {
   //do the event firing
 
   beReady().then((bool) => {
-    let userToCall = document.getElementById("callName").value;
-    otherUser = userToCall;
-
     processAccept(bool);
-    let d = {
-      caller: otherUser,
-      rtcMessage: sessionDescription,
-    };
-    console.log("data:  ", d);
-    answerCall(d);
   });
 
   document.getElementById("answer").style.display = "none";
@@ -344,7 +335,16 @@ function processAccept(peerConnection, error) {
       },
       (error) => console.log(error.message)
     )
-    .then((x) => console.log("x"))
+    .then((x) => {
+      let userToCall = document.getElementById("callName").value;
+      otherUser = userToCall;
+      let d = {
+        caller: otherUser,
+        rtcMessage: sessionDescription,
+      };
+      console.log("data:  ", d);
+      answerCall(d);
+    })
     .catch((e) => console.log(e.message));
 }
 
