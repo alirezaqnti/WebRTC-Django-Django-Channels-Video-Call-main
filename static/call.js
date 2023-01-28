@@ -38,6 +38,7 @@ function answer() {
       caller: otherUser,
       rtcMessage: sessionDescription,
     };
+    console.log("data:  ", d);
     answerCall(d);
   });
 
