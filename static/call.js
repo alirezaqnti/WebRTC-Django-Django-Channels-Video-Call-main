@@ -20,7 +20,7 @@ function call() {
   otherUser = userToCall;
 
   beReady().then((bool) => {
-    console.log(bool);
+    console.log("bool: ", bool);
     processCall(userToCall, bool);
   });
 }
@@ -277,6 +277,8 @@ function createConnectionAndAddStream() {
 
 function processCall(userName, peerConnection) {
   // alert(sessionDescription);
+  console.log("userName: ", userName);
+  console.log("peerConnection: ", peerConnection);
   peerConnection.createOffer(
     (sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
