@@ -268,6 +268,7 @@ function createConnectionAndAddStream() {
 }
 
 function processCall(userName, peerConnection) {
+  alert(sessionDescription);
   peerConnection.createOffer(
     (sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
@@ -285,10 +286,6 @@ function processCall(userName, peerConnection) {
 function processAccept(peerConnection) {
   console.log(peerConnection);
   console.log("processAccept");
-  answerCall({
-    caller: otherUser,
-    rtcMessage: sessionDescription,
-  });
   let sessionDescription = peerConnection.setRemoteDescription(
     new RTCSessionDescription(remoteRTCMessage)
   );
@@ -331,6 +328,10 @@ function processAccept(peerConnection) {
       } else {
         console.log("NO Ice candidate in queue");
       }
+      answerCall({
+        caller: otherUser,
+        rtcMessage: sessionDescription,
+      });
     }),
     (error) => console.log(error.message)
   );

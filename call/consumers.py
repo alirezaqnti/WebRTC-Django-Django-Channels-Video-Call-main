@@ -39,6 +39,8 @@ class CallConsumer(WebsocketConsumer):
         if eventType == "call":
             name = text_data_json["data"]["name"]
             print(self.my_name, "is calling", name)
+            rtcMessage = text_data_json["data"]["rtcMessage"]
+            logging.debug(rtcMessage)
             # print(text_data_json)
 
             # to notify the callee we sent an event to the group name
