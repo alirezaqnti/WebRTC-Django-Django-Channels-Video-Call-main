@@ -295,9 +295,9 @@ function processAccept(peerConnection) {
     new RTCSessionDescription(remoteRTCMessage)
   );
   console.log("processAccept1");
+  console.log("sessionDescription: ", sessionDescription);
   peerConnection.createAnswer(
     (sessionDescription) => {
-      console.log("sessionDescription: ", sessionDescription);
       peerConnection.setLocalDescription(sessionDescription);
       console.log("processAccept2");
       if (iceCandidatesFromCaller.length > 0) {
