@@ -296,8 +296,8 @@ function processAccept(peerConnection) {
   );
   console.log("processAccept1");
   console.log("sessionDescription: ", sessionDescription);
-  peerConnection.createAnswer(
-    (sessionDescription) => {
+  peerConnection
+    .createAnswer((sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
       console.log("processAccept2");
       if (iceCandidatesFromCaller.length > 0) {
@@ -332,16 +332,14 @@ function processAccept(peerConnection) {
       } else {
         console.log("NO Ice candidate in queue");
       }
-
+    })
+    .then((sessionDescription) => {
       answerCall({
         caller: otherUser,
         rtcMessage: sessionDescription,
       });
-    },
-    (error) => {
-      console.log("Error");
-    }
-  );
+    })
+    .catch((error) => console.log(error.message));
 }
 
 /////////////////////////////////////////////////////////
