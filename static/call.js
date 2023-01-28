@@ -297,6 +297,7 @@ function processAccept(peerConnection) {
   console.log("processAccept1");
   peerConnection.createAnswer(
     (sessionDescription) => {
+      console.log("sessionDescription: ", sessionDescription);
       peerConnection.setLocalDescription(sessionDescription);
       console.log("processAccept2");
       if (iceCandidatesFromCaller.length > 0) {
