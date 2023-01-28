@@ -30,11 +30,15 @@ function answer() {
   //do the event firing
 
   beReady().then((bool) => {
+    let userToCall = document.getElementById("callName").value;
+    otherUser = userToCall;
+
     processAccept(bool);
-    answerCall({
+    let d = {
       caller: otherUser,
       rtcMessage: sessionDescription,
-    });
+    };
+    answerCall(d);
   });
 
   document.getElementById("answer").style.display = "none";
@@ -63,7 +67,7 @@ let socket;
 var callSocket;
 let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
-callSocket.onopen = (event) => {
+callSocket.onopen = async function (event) {
   //let's send myName to the socket
   callSocket.send(
     JSON.stringify({
@@ -75,7 +79,7 @@ callSocket.onopen = (event) => {
   );
 };
 
-callSocket.onmessage = (e) => {
+callSocket.onmessage = async function (e) {
   let response = JSON.parse(e.data);
 
   console.log(response);
