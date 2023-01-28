@@ -65,9 +65,9 @@ let sdpConstraints = {
 
 let socket;
 var callSocket;
-let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
-function connectSocket(e) {
+async function connectSocket(e) {
+  let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+  callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
   callSocket.onopen = async function (event) {
     //let's send myName to the socket
     callSocket.send(
@@ -79,32 +79,32 @@ function connectSocket(e) {
       })
     );
   };
+
+  callSocket.onmessage = async function (e) {
+    let response = JSON.parse(e.data);
+
+    console.log(response);
+
+    let type = response.type;
+
+    if (type == "connection") {
+      console.log(response.data.message);
+    }
+
+    if (type == "call_received") {
+      // console.log(response);
+      onNewCall(response.data);
+    }
+
+    if (type == "call_answered") {
+      onCallAnswered(response.data);
+    }
+
+    if (type == "ICEcandidate") {
+      onICECandidate(response.data);
+    }
+  };
 }
-
-callSocket.onmessage = async function (e) {
-  let response = JSON.parse(e.data);
-
-  console.log(response);
-
-  let type = response.type;
-
-  if (type == "connection") {
-    console.log(response.data.message);
-  }
-
-  if (type == "call_received") {
-    // console.log(response);
-    onNewCall(response.data);
-  }
-
-  if (type == "call_answered") {
-    onCallAnswered(response.data);
-  }
-
-  if (type == "ICEcandidate") {
-    onICECandidate(response.data);
-  }
-};
 
 const onNewCall = (data) => {
   //when other called you
