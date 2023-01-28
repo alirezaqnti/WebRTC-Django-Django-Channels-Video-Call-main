@@ -268,7 +268,7 @@ function createConnectionAndAddStream() {
 }
 
 function processCall(userName, peerConnection) {
-  alert(sessionDescription);
+  // alert(sessionDescription);
   peerConnection.createOffer(
     (sessionDescription) => {
       peerConnection.setLocalDescription(sessionDescription);
