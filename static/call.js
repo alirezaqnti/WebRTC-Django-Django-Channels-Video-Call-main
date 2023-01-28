@@ -30,15 +30,11 @@ function answer() {
   //do the event firing
 
   beReady().then((bool) => {
-    processAccept(bool)
-      .then((sessionDescription) => {
-        console.log("TRRR");
-        answerCall({
-          caller: otherUser,
-          rtcMessage: sessionDescription,
-        });
-      })
-      .catch((e) => console.log(e.message));
+    processAccept(bool);
+    answerCall({
+      caller: otherUser,
+      rtcMessage: sessionDescription,
+    });
   });
 
   document.getElementById("answer").style.display = "none";
