@@ -60,98 +60,93 @@ let sdpConstraints = {
 /////////////////////////////////////////////
 
 let socket;
-let callSocket;
-function connectSocket() {
-  let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-  console.log(ws_scheme);
+var callSocket;
+let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
+callSocket.onopen = (event) => {
+  //let's send myName to the socket
+  callSocket.send(
+    JSON.stringify({
+      type: "login",
+      data: {
+        name: myName,
+      },
+    })
+  );
+};
 
-  callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
+callSocket.onmessage = (e) => {
+  let response = JSON.parse(e.data);
 
-  callSocket.onopen = (event) => {
-    //let's send myName to the socket
-    callSocket.send(
-      JSON.stringify({
-        type: "login",
-        data: {
-          name: myName,
-        },
-      })
-    );
-  };
+  console.log(response);
 
-  callSocket.onmessage = (e) => {
-    let response = JSON.parse(e.data);
+  let type = response.type;
 
-    console.log(response);
+  if (type == "connection") {
+    console.log(response.data.message);
+  }
 
-    let type = response.type;
+  if (type == "call_received") {
+    // console.log(response);
+    onNewCall(response.data);
+  }
 
-    if (type == "connection") {
-      console.log(response.data.message);
-    }
+  if (type == "call_answered") {
+    onCallAnswered(response.data);
+  }
 
-    if (type == "call_received") {
-      // console.log(response);
-      onNewCall(response.data);
-    }
+  if (type == "ICEcandidate") {
+    onICECandidate(response.data);
+  }
+};
 
-    if (type == "call_answered") {
-      onCallAnswered(response.data);
-    }
+const onNewCall = (data) => {
+  //when other called you
+  //show answer button
 
-    if (type == "ICEcandidate") {
-      onICECandidate(response.data);
-    }
-  };
+  otherUser = data.caller;
+  remoteRTCMessage = data.rtcMessage;
 
-  const onNewCall = (data) => {
-    //when other called you
-    //show answer button
+  // document.getElementById("profileImageA").src = baseURL + callerProfile.image;
+  document.getElementById("callerName").innerHTML = otherUser;
+  document.getElementById("call").style.display = "none";
+  document.getElementById("answer").style.display = "block";
+};
 
-    otherUser = data.caller;
-    remoteRTCMessage = data.rtcMessage;
+const onCallAnswered = (data) => {
+  //when other accept our call
+  remoteRTCMessage = data.rtcMessage;
+  peerConnection.setRemoteDescription(
+    new RTCSessionDescription(remoteRTCMessage)
+  );
 
-    // document.getElementById("profileImageA").src = baseURL + callerProfile.image;
-    document.getElementById("callerName").innerHTML = otherUser;
-    document.getElementById("call").style.display = "none";
-    document.getElementById("answer").style.display = "block";
-  };
+  document.getElementById("calling").style.display = "none";
 
-  const onCallAnswered = (data) => {
-    //when other accept our call
-    remoteRTCMessage = data.rtcMessage;
-    peerConnection.setRemoteDescription(
-      new RTCSessionDescription(remoteRTCMessage)
-    );
+  console.log("Call Started. They Answered");
+  // console.log(pc);
 
-    document.getElementById("calling").style.display = "none";
+  callProgress();
+};
 
-    console.log("Call Started. They Answered");
-    // console.log(pc);
+const onICECandidate = (data) => {
+  // console.log(data);
+  console.log("GOT ICE candidate");
 
-    callProgress();
-  };
+  let message = data.rtcMessage;
 
-  const onICECandidate = (data) => {
-    // console.log(data);
-    console.log("GOT ICE candidate");
+  let candidate = new RTCIceCandidate({
+    sdpMLineIndex: message.label,
+    candidate: message.candidate,
+  });
 
-    let message = data.rtcMessage;
-
-    let candidate = new RTCIceCandidate({
-      sdpMLineIndex: message.label,
-      candidate: message.candidate,
-    });
-
-    if (peerConnection) {
-      console.log("ICE candidate Added");
-      peerConnection.addIceCandidate(candidate);
-    } else {
-      console.log("ICE candidate Pushed");
-      iceCandidatesFromCaller.push(candidate);
-    }
-  };
-}
+  if (peerConnection) {
+    console.log("ICE candidate Added");
+    peerConnection.addIceCandidate(candidate);
+  } else {
+    console.log("ICE candidate Pushed");
+    iceCandidatesFromCaller.push(candidate);
+  }
+};
 
 /**
  *
