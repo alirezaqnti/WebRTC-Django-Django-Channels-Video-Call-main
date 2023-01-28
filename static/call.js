@@ -32,6 +32,7 @@ function answer() {
   beReady().then((bool) => {
     processAccept(bool)
       .then((sessionDescription) => {
+        console.log("TRRR");
         answerCall({
           caller: otherUser,
           rtcMessage: sessionDescription,
