@@ -6,7 +6,7 @@ let localVideo = document.querySelector("#localVideo");
 let remoteVideo = document.querySelector("#remoteVideo");
 
 let otherUser;
-let remoteRTCMessage;
+var remoteRTCMessage;
 
 let iceCandidatesFromCaller = [];
 let remoteStream;
@@ -182,7 +182,7 @@ function sendCall(data) {
 function answerCall(data) {
   //to answer a call
   // socket.emit("answerCall", data);
-  console.log("answerCall");
+  alert("answerCall");
   callSocket.send(
     JSON.stringify({
       type: "answer_call",
@@ -221,15 +221,10 @@ function beReady() {
       console.log(localStream);
       localVideo.srcObject = stream;
       try {
-        alert("RTCPeerConnection");
         var peerConnection = new RTCPeerConnection(pcConfig);
         peerConnection.onicecandidate = handleIceCandidate;
-        alert("handleIceCandidate");
         peerConnection.onaddstream = handleRemoteStreamAdded;
-        alert("handleRemoteStreamAdded");
         peerConnection.onremovestream = handleRemoteStreamRemoved;
-        alert("handleRemoteStreamRemoved");
-
         console.log("Created RTCPeerConnnection");
         // return;
       } catch (e) {
@@ -241,7 +236,6 @@ function beReady() {
       localStream
         .getTracks()
         .forEach((track) => peerConnection.addTrack(track, localStream));
-      //   peerConnection.addStream(localStream);
       return peerConnection;
     })
     .catch(function (e) {
@@ -291,7 +285,11 @@ function processCall(userName, peerConnection) {
 function processAccept(peerConnection) {
   console.log(peerConnection);
   console.log("processAccept");
-  peerConnection.setRemoteDescription(
+  answerCall({
+    caller: otherUser,
+    rtcMessage: sessionDescription,
+  });
+  let sessionDescription = peerConnection.setRemoteDescription(
     new RTCSessionDescription(remoteRTCMessage)
   );
   console.log("processAccept1");
@@ -333,15 +331,9 @@ function processAccept(peerConnection) {
       } else {
         console.log("NO Ice candidate in queue");
       }
-    })
+    }),
+    (error) => console.log(error.message)
   );
-  // .then((sessionDescription) => {
-  //   answerCall({
-  //     caller: otherUser,
-  //     rtcMessage: sessionDescription,
-  //   });
-  // })
-  // .catch((error) => console.log(error.message));
 }
 
 /////////////////////////////////////////////////////////
