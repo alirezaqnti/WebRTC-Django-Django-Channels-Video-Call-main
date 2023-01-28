@@ -344,7 +344,7 @@ function processAccept(peerConnection, error) {
       },
       (error) => console.log(error.message)
     )
-    .then((x) => console.log(x))
+    .then((x) => console.log("x"))
     .catch((e) => console.log(e.message));
 }
 
