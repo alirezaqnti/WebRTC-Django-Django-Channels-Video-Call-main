@@ -62,8 +62,8 @@ class CallConsumer(WebsocketConsumer):
 
             caller = text_data_json["data"]["caller"]
             # print(self.my_name, "is answering", caller, "calls.")
-            rtcMessage = text_data_json["data"]["rtcMessage"]
-            logging.debug(rtcMessage)
+            # rtcMessage = text_data_json["data"]["rtcMessage"]
+            logging.debug(text_data_json["data"])
             async_to_sync(self.channel_layer.group_send)(
                 caller,
                 {
