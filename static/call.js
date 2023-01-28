@@ -65,19 +65,21 @@ let sdpConstraints = {
 
 let socket;
 var callSocket;
-let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
-callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
-callSocket.onopen = async function (event) {
-  //let's send myName to the socket
-  callSocket.send(
-    JSON.stringify({
-      type: "login",
-      data: {
-        name: myName,
-      },
-    })
-  );
-};
+function connectSocket(e) {
+  let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
+  callSocket = new WebSocket(ws_scheme + window.location.host + "/ws/call/");
+  callSocket.onopen = async function (event) {
+    //let's send myName to the socket
+    callSocket.send(
+      JSON.stringify({
+        type: "login",
+        data: {
+          name: myName,
+        },
+      })
+    );
+  };
+}
 
 callSocket.onmessage = async function (e) {
   let response = JSON.parse(e.data);
