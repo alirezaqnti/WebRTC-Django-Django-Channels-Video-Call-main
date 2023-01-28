@@ -30,7 +30,14 @@ function answer() {
   //do the event firing
 
   beReady().then((bool) => {
-    processAccept(bool);
+    processAccept(bool)
+      .then((sessionDescription) => {
+        answerCall({
+          caller: otherUser,
+          rtcMessage: sessionDescription,
+        });
+      })
+      .catch((e) => console.log(e.message));
   });
 
   document.getElementById("answer").style.display = "none";
@@ -294,48 +301,47 @@ function processAccept(peerConnection, error) {
     console.log(error.message);
   }
   console.log("processAccept1");
-  peerConnection.createAnswer((sessionDescription, e) => {
-    console.log(e.message);
-    peerConnection.setLocalDescription(sessionDescription);
-    console.log("processAccept2");
-    if (iceCandidatesFromCaller.length > 0) {
-      //I am having issues with call not being processed in real world (internet, not local)
-      //so I will push iceCandidates I received after the call arrived, push it and, once we accept
-      //add it as ice candidate
-      //if the offer rtc message contains all thes ICE candidates we can ingore this.
-      console.log("processAccept3");
-      for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
-        //
-        let candidate = iceCandidatesFromCaller[i];
-        console.log("ICE candidate Added From queue");
-        console.log("processAccept4");
-        try {
-          peerConnection
-            .addIceCandidate(candidate)
-            .then((done) => {
-              console.log(done);
-              console.log("processAccept5");
-            })
-            .catch((error) => {
-              console.log(error);
-              console.log("processAccept6");
-            });
-        } catch (error) {
-          console.log(error);
+  peerConnection.createAnswer(
+    (sessionDescription, e) => {
+      console.log(e.message);
+      peerConnection.setLocalDescription(sessionDescription);
+      console.log("processAccept2");
+      if (iceCandidatesFromCaller.length > 0) {
+        //I am having issues with call not being processed in real world (internet, not local)
+        //so I will push iceCandidates I received after the call arrived, push it and, once we accept
+        //add it as ice candidate
+        //if the offer rtc message contains all thes ICE candidates we can ingore this.
+        console.log("processAccept3");
+        for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
+          //
+          let candidate = iceCandidatesFromCaller[i];
+          console.log("ICE candidate Added From queue");
+          console.log("processAccept4");
+          try {
+            peerConnection
+              .addIceCandidate(candidate)
+              .then((done) => {
+                console.log(done);
+                console.log("processAccept5");
+              })
+              .catch((error) => {
+                console.log(error);
+                console.log("processAccept6");
+              });
+          } catch (error) {
+            console.log(error);
+          }
         }
+        iceCandidatesFromCaller = [];
+        console.log("processAccept7");
+        console.log("ICE candidate queue cleared");
+      } else {
+        console.log("NO Ice candidate in queue");
       }
-      iceCandidatesFromCaller = [];
-      console.log("processAccept7");
-      console.log("ICE candidate queue cleared");
-    } else {
-      console.log("NO Ice candidate in queue");
-    }
-    answerCall({
-      caller: otherUser,
-      rtcMessage: sessionDescription,
-    });
-  }),
-    (error) => console.log(error.message);
+      return sessionDescription;
+    },
+    (error) => console.log(error.message)
+  );
 }
 
 /////////////////////////////////////////////////////////
