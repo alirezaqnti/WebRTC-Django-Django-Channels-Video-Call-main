@@ -337,6 +337,7 @@ function processAccept(peerConnection, error) {
     )
     .then((x) => {
       let userToCall = document.getElementById("callName").value;
+      console.log("x:  ", x);
       otherUser = userToCall;
       let d = {
         caller: otherUser,
