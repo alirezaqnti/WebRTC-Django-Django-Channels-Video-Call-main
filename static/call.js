@@ -136,7 +136,7 @@ const onICECandidate = (data) => {
     sdpMLineIndex: message.label,
     candidate: message.candidate,
   });
-
+  console.log(peerConnection);
   if (peerConnection) {
     console.log("ICE candidate Added");
     peerConnection.addIceCandidate(candidate);
