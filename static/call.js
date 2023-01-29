@@ -336,7 +336,7 @@ function processAccept(peerConnection, error) {
       (error) => console.log(error.message)
     )
     .then((x) => {
-      let userToCall = document.getElementById("callName").value;
+      let userToCall = document.getElementById("callerName").value;
       console.log("x:  ", x);
       otherUser = userToCall;
       let d = {
@@ -344,6 +344,8 @@ function processAccept(peerConnection, error) {
         rtcMessage: x,
       };
       console.log("data:  ", d);
+      console.log("data caller:  ", d.caller);
+      console.log("data rtcMessage:  ", d.rtcMessage);
       answerCall(d);
     })
     .catch((e) => console.log(e.message));
