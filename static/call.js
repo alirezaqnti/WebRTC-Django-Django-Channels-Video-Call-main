@@ -11,7 +11,7 @@ var remoteRTCMessage;
 let iceCandidatesFromCaller = [];
 let remoteStream;
 let localStream;
-
+var peerConnection;
 let callInProgress = false;
 
 //event from html
@@ -111,8 +111,7 @@ const onNewCall = (data) => {
   document.getElementById("answer").style.display = "block";
 };
 
-const onCallAnswered = (data, e) => {
-  console.log(e);
+const onCallAnswered = (data) => {
   //when other accept our call
   remoteRTCMessage = data.rtcMessage;
   peerConnection.setRemoteDescription(
@@ -219,7 +218,7 @@ function beReady() {
       console.log(localStream);
       localVideo.srcObject = stream;
       try {
-        var peerConnection = new RTCPeerConnection(pcConfig);
+        peerConnection = new RTCPeerConnection(pcConfig);
         peerConnection.onicecandidate = handleIceCandidate;
         peerConnection.onaddstream = handleRemoteStreamAdded;
         peerConnection.onremovestream = handleRemoteStreamRemoved;
