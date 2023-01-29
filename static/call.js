@@ -111,7 +111,8 @@ const onNewCall = (data) => {
   document.getElementById("answer").style.display = "block";
 };
 
-const onCallAnswered = (data) => {
+const onCallAnswered = (data, e) => {
+  console.log(e);
   //when other accept our call
   remoteRTCMessage = data.rtcMessage;
   peerConnection.setRemoteDescription(
