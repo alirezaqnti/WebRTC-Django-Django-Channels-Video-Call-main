@@ -285,70 +285,66 @@ function processCall(userName, peerConnection) {
 function processAccept(peerConnection, error) {
   console.log(peerConnection);
   console.log("processAccept");
-  try {
-    peerConnection.setRemoteDescription(
-      new RTCSessionDescription(remoteRTCMessage)
-    );
-    console.log("processAccept1");
-  } catch {
-    console.log(error);
-  }
   peerConnection
-    .createAnswer(
-      (sessionDescription) => {
-        peerConnection.setLocalDescription(sessionDescription);
-        console.log("processAccept2");
-        if (iceCandidatesFromCaller.length > 0) {
-          //I am having issues with call not being processed in real world (internet, not local)
-          //so I will push iceCandidates I received after the call arrived, push it and, once we accept
-          //add it as ice candidate
-          //if the offer rtc message contains all thes ICE candidates we can ingore this.
-          console.log("processAccept3");
-          for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
-            //
-            let candidate = iceCandidatesFromCaller[i];
-            console.log("ICE candidate Added From queue");
-            console.log("processAccept4");
-            try {
-              peerConnection
-                .addIceCandidate(candidate)
-                .then((done) => {
-                  console.log(done);
-                  console.log("processAccept5");
-                })
-                .catch((error) => {
+    .setRemoteDescription(new RTCSessionDescription(remoteRTCMessage))
+    .then(() => {
+      peerConnection
+        .createAnswer(
+          (sessionDescription) => {
+            peerConnection.setLocalDescription(sessionDescription);
+            console.log("processAccept2");
+            if (iceCandidatesFromCaller.length > 0) {
+              //I am having issues with call not being processed in real world (internet, not local)
+              //so I will push iceCandidates I received after the call arrived, push it and, once we accept
+              //add it as ice candidate
+              //if the offer rtc message contains all thes ICE candidates we can ingore this.
+              console.log("processAccept3");
+              for (let i = 0; i < iceCandidatesFromCaller.length; i++) {
+                //
+                let candidate = iceCandidatesFromCaller[i];
+                console.log("ICE candidate Added From queue");
+                console.log("processAccept4");
+                try {
+                  peerConnection
+                    .addIceCandidate(candidate)
+                    .then((done) => {
+                      console.log(done);
+                      console.log("processAccept5");
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                      console.log("processAccept6");
+                    });
+                } catch (error) {
                   console.log(error);
-                  console.log("processAccept6");
-                });
-            } catch (error) {
-              console.log(error);
+                }
+              }
+              iceCandidatesFromCaller = [];
+              console.log("processAccept7");
+              console.log("ICE candidate queue cleared");
+            } else {
+              console.log("NO Ice candidate in queue");
             }
-          }
-          iceCandidatesFromCaller = [];
-          console.log("processAccept7");
-          console.log("ICE candidate queue cleared");
-        } else {
-          console.log("NO Ice candidate in queue");
-        }
-        console.log("sessionDescription: ", sessionDescription);
-        return sessionDescription;
-      },
-      (error) => console.log(error.message)
-    )
-    .then((x) => {
-      let userToCall = document.getElementById("callerName").value;
-      console.log("x:  ", x);
-      otherUser = userToCall;
-      let d = {
-        caller: otherUser,
-        rtcMessage: x,
-      };
-      console.log("data:  ", d);
-      console.log("data caller:  ", d.caller);
-      console.log("data rtcMessage:  ", d.rtcMessage);
-      answerCall(d);
-    })
-    .catch((e) => console.log(e.message));
+            console.log("sessionDescription: ", sessionDescription);
+            return sessionDescription;
+          },
+          (error) => console.log(error.message)
+        )
+        .then((x) => {
+          let userToCall = document.getElementById("callerName").value;
+          console.log("x:  ", x);
+          otherUser = userToCall;
+          let d = {
+            caller: otherUser,
+            rtcMessage: x,
+          };
+          console.log("data:  ", d);
+          console.log("data caller:  ", d.caller);
+          console.log("data rtcMessage:  ", d.rtcMessage);
+          answerCall(d);
+        })
+        .catch((e) => console.log(e.message));
+    });
 }
 
 /////////////////////////////////////////////////////////
