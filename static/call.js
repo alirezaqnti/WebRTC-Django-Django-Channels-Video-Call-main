@@ -330,7 +330,7 @@ function processAccept(peerConnection, error) {
         } else {
           console.log("NO Ice candidate in queue");
         }
-        console.log(sessionDescription);
+        console.log("sessionDescription: ", sessionDescription);
         return sessionDescription;
       },
       (error) => console.log(error.message)
