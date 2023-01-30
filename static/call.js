@@ -291,7 +291,7 @@ function processAccept(peerConnection, error) {
     );
     console.log("processAccept1");
   } catch {
-    console.log(error.message);
+    console.log(error);
   }
   peerConnection
     .createAnswer(
