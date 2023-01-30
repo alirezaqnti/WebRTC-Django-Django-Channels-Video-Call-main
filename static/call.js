@@ -332,7 +332,7 @@ function processAccept(peerConnection, error) {
       console.log("sessionDescription: ", sessionDescription);
       let d = {
         caller: otherUser,
-        rtcMessage: x,
+        rtcMessage: sessionDescription,
       };
       console.log("data:  ", d);
       console.log("data caller:  ", d.caller);
