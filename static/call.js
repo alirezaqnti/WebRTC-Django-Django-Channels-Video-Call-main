@@ -341,7 +341,7 @@ function processAccept(peerConnection, error) {
       otherUser = userToCall;
       let d = {
         caller: otherUser,
-        rtcMessage: sessionDescription,
+        rtcMessage: x,
       };
       console.log("data:  ", d);
       console.log("data caller:  ", d.caller);
